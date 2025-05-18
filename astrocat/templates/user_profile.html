@@ -1,0 +1,152 @@
+<!-- Шаблон для страницы пользователя -->
+{% extends "base.html" %}
+
+{% block content %}
+<main class="container my-5 flex-grow-1">
+    <div class="shadow-lg border-0 rounded-4 bg-white p-4">
+        <!-- Профиль -->
+        <div class="row g-4 align-items-center mb-4">
+            <div class="col-md-3 text-center">
+                <div class="position-relative">
+                    <img src="https://robohash.org/{{ current_user.username }}"
+                         class="rounded-circle border border-4 border-primary shadow-lg"
+                         alt="Аватар {{ current_user.username }}"
+                         style="width: 200px; height: 200px; object-fit: cover;">
+                    {% if current_user == user %}
+                    <a href="/user/edit/{{ current_user.id }}"
+                       class="btn btn-primary btn-sm rounded-pill position-absolute bottom-0 end-0 m-2"
+                       title="Редактировать профиль">
+                        <i class="bi-pencil"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <h1 class="display-5 fw-bold text-dark mb-2">
+                    {{ current_user.name }} {{ current_user.surname }}
+                    <small class="text-muted fs-4">@{{ current_user.username }}</small>
+                </h1>
+
+                <div class="d-flex flex-wrap gap-4 text-muted mb-3">
+                    <div><i class="bi-calendar-event me-2"></i>Возраст: {{ current_user.age|default:"Не указан" }}</div>
+                    <div><i class="bi-stars me-2"></i>Записей: {{ news.count }}</div>
+                </div>
+
+                <h5 class="fw-semibold mb-2">О себе:</h5>
+                <p class="text-muted lh-lg mb-0">
+                    {{ current_user.about|default:"Пользователь пока не добавил информацию о себе" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Записки -->
+        <div class="border-top pt-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+                <h3 class="h4 fw-bold text-dark mb-0">
+                    <i class="bi-journal-text me-2"></i>Записки астронома
+                </h3>
+                {% if user.is_authenticated and current_user == user %}
+                <a href="{% url 'add_news' %}" class="btn btn-primary btn-sm rounded-pill px-3">
+                    <i class="bi-plus-circle me-2"></i>Новая запись
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="row g-3">
+                {% for item in news %}
+                {% if item.is_private and current_user == user or not item.is_private or user.is_superuser %}
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        {% if item.minio_url %}
+                        <div class="ratio ratio-16x9">
+                            <img src="{{ item.minio_url }}"
+                                 class="img-fluid rounded-top object-fit-cover"
+                                 alt="Иллюстрация записи"
+                                 loading="lazy">
+                        </div>
+                        {% else %}
+                        <div class="ratio ratio-16x9 rounded-top-3 overflow-hidden"
+                             style="background:
+                                     linear-gradient(135deg, #0b0a20 0%, #1a1a2e 30%, #16213e 60%, #2a2358 100%);
+                                     background-blend-mode: overlay;
+                                     position: relative;">
+                            <div style="
+                                    position: absolute;
+                                    width: 100%;
+                                    height: 100%;
+                                    background: radial-gradient(circle at 50% 50%,
+                                        rgba(255,255,255,0.1) 0%,
+                                        rgba(255,255,255,0) 70%);
+                                "></div>
+                        </div>
+                        {% endif %}
+
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="card-title mb-0 fs-5">{{ item.title }}</h5>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if item.is_private %}
+                                    <span class="badge bg-warning text-dark py-1">
+                                            <i class="bi-lock"></i> Приватная
+                                        </span>
+                                    {% endif %}
+                                    <a href="/user/{{ item.user.id }}"
+                                       data-bs-toggle="tooltip"
+                                       title="Профиль автора"
+                                       class="avatar-link">
+                                        <img src="https://robohash.org/{{ item.user.username }}"
+                                             class="rounded-circle border border-2 border-primary"
+                                             width="36"
+                                             height="36"
+                                             alt="Аватар">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <p class="card-text text-muted lh-sm mb-3">{{ item.content }}</p>
+
+                            <div class="d-flex justify-content-between align-items-center text-muted small">
+                                <div class="d-flex gap-2">
+                                    <span><i
+                                            class="bi-clock-history me-1"></i>{{ item.created_at|date:"d.m.Y, H:i" }}</span>
+                                    <span><i class="bi-person-circle me-1"></i>{{ item.user.name }} {{ item.user.surname }}</span>
+                                </div>
+
+                                {% if user.is_authenticated and user == item.user or user.is_authenticated and user.is_superuser %}
+                                <div class="d-flex gap-1">
+                                    <a href="/news/edit/{{ item.id }}"
+                                       class="btn btn-sm btn-outline-primary rounded-pill px-2"
+                                       title="Редактировать">
+                                        <i class="bi-pencil-square"></i>
+                                    </a>
+                                    <a href="/news/delete/{{ item.id }}"
+                                       class="btn btn-sm btn-outline-danger rounded-pill px-2"
+                                       title="Удалить">
+                                        <i class="bi-trash3"></i>
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <div class="text-muted fs-4 mb-3">
+                        <i class="bi-moon-stars display-5 d-block mb-3"></i>
+                        Пока нет ни одной записи
+                    </div>
+                    {% if user.is_authenticated and current_user == user %}
+                    <a href="{% url 'add_news' %}" class="btn btn-primary rounded-pill">
+                        <i class="bi-plus-circle me-2"></i>Создать первую запись
+                    </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,179 @@
+<!-- Шаблон для страницы добавления/редактирования космического объекта -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden cosmic-card">
+                <div class="card-body p-7">
+                    <!-- Заголовок -->
+                    <div class="text-center mb-5">
+                        <div class="icon-wrapper bg-primary-gradient rounded-circle mb-3">
+                            <i class="bi-globe2 text-white fs-3"></i>
+                        </div>
+                        <h2 class="fw-bold mb-2 cosmic-title">Новый космический объект</h2>
+                        <p class="text-muted">Поделитесь своими наблюдениями с сообществом</p>
+                        <div class="cosmic-divider"></div>
+                    </div>
+
+                    <!-- Форма -->
+                    <form method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+                        <!-- Исправлено -->
+                        {% csrf_token %}
+
+                        <!-- Поля формы -->
+                        <div class="row g-2">
+                            {% for field in form %}
+                            <div class="col-12">
+                                {% if field.field.widget.input_type == "checkbox" %}
+                                <div class="form-check form-switch ps-5 mb-4">
+                                    {{ field }}
+                                    <label class="form-check-label ms-3" for="{{ field.id_for_label }}">
+                                        {{ field.label }}  <!-- Проверьте передачу метки -->
+                                    </label>
+                                    {% if field.errors %}
+                                    <div class="invalid-feedback d-flex align-items-center mt-2">
+                                        <i class="bi-exclamation-circle me-2"></i>
+                                        {{ field.errors|first }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% elif field.field.widget.input_type == "file" %}
+                                <div class="mb-4">  <!-- Исправлено -->
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                    <small class="text-muted d-block mt-1">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ field.errors|first }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                <div class="form-floating mb-4">
+                                    {{ field }}
+                                    <label for="{{ field.id_for_label }}">
+                                        {{ field.label }}
+                                    </label>
+                                    {% if field.errors %}
+                                    <div class="invalid-feedback d-flex align-items-center">
+                                        <i class="bi-exclamation-circle me-2"></i>
+                                        {{ field.errors|first }}
+                                    </div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                    <div class="form-text ms-2">{{ field.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Кнопка отправки -->
+                        <div class="col-12">
+                            <div class="d-grid">
+                                <button type="submit"
+                                        class="btn btn-primary-gradient btn-lg rounded-pill py-3 text-white">
+                                    <i class="bi-check-circle me-2"></i>Сохранить
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-wrapper {
+        width: 70px;
+        height: 70px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bg-primary-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    .cosmic-divider {
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent 0%, #6366f1 50%, transparent 100%);
+        margin: 1rem auto;
+    }
+
+    .form-floating textarea.form-control,
+    .form-floating input.form-control {
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .btn-primary-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border: none;
+        transition: transform 0.2s ease;
+    }
+
+    .btn-primary-gradient:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Общие стили свича */
+    .form-check.form-switch {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+        flex-shrink: 0;
+        position: relative;
+        appearance: none; /* убираем нативные стили */
+        background-color: #e9ecef; /* цвет выключенного трека */
+        border-radius: 1.5em;
+        outline: none;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .fade-show {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-body {
+            padding: 2rem;
+        }
+
+        .btn-lg {
+            padding: 1rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}

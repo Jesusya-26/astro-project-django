@@ -1,0 +1,167 @@
+<!-- Шаблон для страницы регистрации пользователя -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-body p-5">
+                    <!-- Заголовок -->
+                    <div class="text-center mb-5">
+                        <div class="icon-wrapper bg-primary-gradient rounded-circle mb-3">
+                            <i class="bi-person-plus text-white fs-3"></i>
+                        </div>
+                        <h2 class="fw-bold mb-2">Присоединиться к сообществу</h2>
+                        <p class="text-muted">Создайте аккаунт чтобы получить полный доступ</p>
+                        <div class="cosmic-divider"></div>
+                    </div>
+
+                    <!-- Форма -->
+                    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+
+                        {% if message %}
+                        <div class="alert alert-info mb-4 d-flex align-items-center fade-show">
+                            <i class="bi-info-circle fs-4 me-3"></i>
+                            <div>{{ message }}</div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Поля формы -->
+                        <div class="row g-1">
+                            {% for field in form %}
+                            <div class="col-12">
+                                {% if field.field.widget.input_type == "checkbox" %}
+                                <div class="form-check form-switch ps-5 mb-4">
+                                    {{ field }}
+                                    <label class="form-check-label ms-3" for="{{ field.id_for_label }}">
+                                        <i class="bi-shield-check me-2"></i>{{ field.label }}
+                                    </label>
+                                    {% if field.errors %}
+                                    <div class="invalid-feedback d-flex align-items-center mt-2">
+                                        <i class="bi-exclamation-circle me-2"></i>
+                                        {{ field.errors|first }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                <div class="form-floating mb-4">
+                                    {{ field }}
+                                    <label for="{{ field.id_for_label }}">
+                                        {{ field.label }}
+                                    </label>
+                                    {% if field.errors %}
+                                    <div class="invalid-feedback d-flex align-items-center">
+                                        <i class="bi-exclamation-circle me-2"></i>
+                                        {{ field.errors|first }}
+                                    </div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                    <div class="form-text ms-2">{{ field.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Кнопка отправки -->
+                        <div class="d-grid mt-2">
+                            <button type="submit" class="btn btn-primary-gradient btn-lg rounded-pill py-3 text-white">
+                                <i class="bi-person-plus me-2"></i>Создать аккаунт
+                            </button>
+                        </div>
+
+                        <!-- Ссылка на вход -->
+                        <div class="text-center mt-4 pt-3 border-top">
+                            <p class="text-muted mb-0">
+                                Уже зарегистрированы?
+                                <a href="{% url 'login' %}" class="link-primary text-decoration-none">
+                                    Войти в аккаунт
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-wrapper {
+        width: 70px;
+        height: 70px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bg-primary-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    .cosmic-divider {
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent 0%, #6366f1 50%, transparent 100%);
+        margin: 1rem auto;
+    }
+
+    .form-floating textarea.form-control,
+    .form-floating input.form-control {
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .btn-primary-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border: none;
+        transition: transform 0.2s ease;
+    }
+
+    .btn-primary-gradient:hover {
+        transform: translateY(-2px);
+    }
+
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
+        margin-left: -2.5em;
+    }
+
+    .fade-show {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-body {
+            padding: 2rem;
+        }
+
+        .btn-lg {
+            padding: 1rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}

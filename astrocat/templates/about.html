@@ -1,0 +1,275 @@
+<!-- Шаблон для страницы с информацией о проекте-->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xxl-8">
+            <!-- Заголовок -->
+            <div class="text-center mb-5">
+                <div class="icon-wrapper bg-primary-gradient rounded-circle mb-4">
+                    <i class="bi-rocket text-white fs-2"></i>
+                </div>
+                <h1 class="display-4 fw-bold mb-3 cosmic-title">Astrocat</h1>
+                <p class="lead text-muted mb-4">
+                    Цифровая обсерватория для исследователей космоса
+                </p>
+                <div class="cosmic-divider"></div>
+            </div>
+
+            <!-- Основной контент -->
+            <div class="cosmic-features">
+                <!-- Цели проекта -->
+                <div class="cosmic-card">
+                    <div class="card-header">
+                        <i class="bi-bullseye cosmic-icon"></i>
+                        <h2>Наши цели</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="feature-item">
+                            <div class="icon-circle bg-purple">
+                                <i class="bi-journal-text"></i>
+                            </div>
+                            <div>
+                                <h4>Пространство для заметок</h4>
+                                <p>Публикация личных наблюдений и исследований в области астрономии</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="icon-circle bg-orange">
+                                <i class="bi-database"></i>
+                            </div>
+                            <div>
+                                <h4>Космический каталог</h4>
+                                <p>Открытая база данных звёзд, планет, галактик и систем</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item">
+                            <div class="icon-circle bg-blue">
+                                <i class="bi-people"></i>
+                            </div>
+                            <div>
+                                <h4>Сообщество единомышленников</h4>
+                                <p>Площадка для объединения профессионалов и энтузиастов</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Возможности -->
+                <div class="cosmic-card">
+                    <div class="card-header">
+                        <i class="bi-stars cosmic-icon"></i>
+                        <h2>Возможности</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="capability-item">
+                                    <i class="bi-pencil-square"></i>
+                                    <div>
+                                        <h4>Публикация заметок</h4>
+                                        <p class="text-muted">Текст, изображения и ссылки</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="capability-item">
+                                    <i class="bi-search"></i>
+                                    <div>
+                                        <h4>Исследование каталога</h4>
+                                        <p class="text-muted">Поиск и редактирование объектов</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="capability-item">
+                                    <i class="bi-chat-dots"></i>
+                                    <div>
+                                        <h4>Обсуждения</h4>
+                                        <p class="text-muted">Комментирование материалов <em>(скоро)</em></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Почему мы -->
+                <div class="cosmic-card highlight-card">
+                    <div class="card-body">
+                        <div class="row align-items-center g-4">
+                            <div class="col-md-4 text-center">
+                                <div class="cosmic-avatar">
+                                    <i class="bi-heart-fill"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h3 class="mb-3">Почему выбирают нас?</h3>
+                                <p class="lead text-muted">
+                                    Astrocat создаётся с любовью к науке, чтобы сделать знания об астрономии доступными
+                                    и вдохновляющими. Мы открыты для сотрудничества и новых идей!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Контакты -->
+                <div class="cosmic-card contact-card">
+                    <div class="card-header">
+                        <i class="bi-envelope-paper-heart cosmic-icon"></i>
+                        <h2>Свяжитесь с нами</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="contact-item">
+                                    <div class="icon-wrapper bg-primary">
+                                        <i class="bi-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Электронная почта</h4>
+                                        <a href="mailto:astrocat@example.com" class="stretched-link">astrocat@example.com</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="contact-item">
+                                    <div class="icon-wrapper bg-telegram">
+                                        <i class="bi-send"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Telegram</h4>
+                                        <span class="text-muted">Скоро будет...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cosmic-title {
+        background: linear-gradient(45deg, #4e54c8, #8f94fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .cosmic-divider {
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent 0%, #6366f1 50%, transparent 100%);
+        margin: 2rem auto;
+    }
+
+    .cosmic-card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+        padding: 2rem;
+    }
+
+    .cosmic-card .card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cosmic-icon {
+        font-size: 2rem;
+        color: #6366f1;
+    }
+
+    .cosmic-avatar {
+        font-size: 5rem;
+    }
+
+    .feature-item {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+        background: #f8f9fa;
+        transform: translateY(-5px);
+    }
+
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .bg-purple {
+        background: #6f42c1;
+    }
+
+    .bg-orange {
+        background: #fd7e14;
+    }
+
+    .bg-blue {
+        background: #0d6efd;
+    }
+
+    .highlight-card {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+    }
+
+    .contact-item {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        position: relative;
+    }
+
+    .contact-item .icon-wrapper {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .bg-telegram {
+        background: #0088cc;
+    }
+
+    @media (max-width: 768px) {
+        .cosmic-card {
+            padding: 1.5rem;
+        }
+
+        .feature-item {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}

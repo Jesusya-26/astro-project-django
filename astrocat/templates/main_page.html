@@ -1,0 +1,105 @@
+<!-- Шаблон для основной страницы с записками астрономов -->
+{% extends "base.html" %}
+
+{% block content %}
+<main class="container-md my-5 flex-grow-1">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-dark mb-3">
+            <i class="bi-journal-text me-2"></i>Записки астрономов
+        </h1>
+
+        {% if user.is_authenticated %}
+        <a href="{% url 'add_news' %}" class="btn btn-primary btn-lg px-4 rounded-pill">
+            <i class="bi-plus-circle me-2"></i>Добавить запись
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="row justify-content-center g-4">
+        {% for item in news %}
+        <div class="col-12 col-md-6">
+            <div class="card border-0 shadow rounded-4 overflow-hidden h-100">
+                {% if item.minio_url %}
+                <div class="ratio ratio-16x9 bg-dark">
+                    <img src="{{ item.minio_url }}"
+                         class="img-fluid object-fit-cover"
+                         alt="Иллюстрация записи"
+                         loading="lazy">
+                </div>
+                {% else %}
+                <div class="ratio ratio-16x9 position-relative
+                        d-flex align-items-center justify-content-center
+                        overflow-hidden"
+                     style="background: linear-gradient(135deg,
+                         #0b0a20 0%,
+                         #1a1a2e 30%,
+                         #16213e 60%,
+                         #2a2358 100%);">
+                    <div class="position-absolute w-100 h-100"
+                         style="background: radial-gradient(circle at 50% 50%,
+                             rgba(255,255,255,0.1) 0%,
+                             rgba(255,255,255,0) 70%);">
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h2 class="h5 fw-semibold mb-0 text-truncate" title="{{ item.title }}">{{ item.title }}</h2>
+                        <a href="/user/{{ item.user.id }}"
+                           class="avatar-tooltip"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="Профиль автора">
+                            <img src="https://robohash.org/{{ item.user.username }}"
+                                 class="avatar rounded-circle border border-2 border-primary"
+                                 width="40"
+                                 height="40"
+                                 alt="Аватар {{ item.user.username }}">
+                        </a>
+                    </div>
+
+                    <p class="card-text text-muted small lh-sm mb-3" style="max-height: 6em; overflow: hidden;">
+                        {{ item.content }}
+                    </p>
+
+                    {% if user.is_authenticated and user == item.user or user.is_authenticated and user.is_superuser %}
+                    <div class="d-flex gap-2 mb-2">
+                        <a href="/news/edit/{{ item.id }}"
+                           class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                            <i class="bi-pencil-square me-1"></i>Изменить
+                        </a>
+                        <a href="/news/delete/{{ item.id }}"
+                           class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                            <i class="bi-trash3 me-1"></i>Удалить
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <div class="pt-2 border-top text-muted small">
+                        <div class="d-flex justify-content-between">
+                            <span>
+                                <a href="/user/{{ item.user.id }}" class="link-primary text-decoration-none">
+                                    {{ item.user.name }} {{ item.user.surname }}
+                                </a>
+                            </span>
+                            <span>
+                                <i class="bi-clock-history me-1"></i>
+                                {{ item.created_at|date:"d.m.Y, H:i" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="text-muted fs-4 mb-3">
+                <i class="bi-moon-stars display-5 d-block mb-3"></i>
+                Пока нет ни одной записи
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,63 @@
+<!-- Шаблон для страницы редактирования пользователя -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow">
+        <div class="card-body">
+            <h2 class="card-title mb-4">Редактирование пользователя</h2>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    {{ form.username.label }}
+                    {{ form.username }}
+                    {% for error in form.username.errors %}
+                    <div class="alert alert-danger mt-1" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.name.label }}
+                    {{ form.name }}
+                    {% for error in form.name.errors %}
+                    <div class="alert alert-danger mt-1" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.surname.label }}
+                    {{ form.surname }}
+                    {% for error in form.surname.errors %}
+                    <div class="alert alert-danger mt-1" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.age.label }}
+                    {{ form.age }}
+                    {% for error in form.age.errors %}
+                    <div class="alert alert-danger mt-1" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.about.label }}
+                    {{ form.about }}
+                    {% for error in form.about.errors %}
+                    <div class="alert alert-danger mt-1" role="alert">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+
+                {% if message %}
+                <div class="alert alert-info mt-3" role="alert">{{ message }}</div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

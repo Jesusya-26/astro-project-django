@@ -1,0 +1,189 @@
+<!-- Шаблон для страницы с информацией о космическом объекте -->
+{% extends "base.html" %}
+
+{% block content %}
+<main class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-body p-4 p-lg-5">
+            <!-- Основная информация -->
+            <div class="row g-5 align-items-start">
+                {% if photo %}
+                <div class="col-lg-5 text-center">
+                    <div class="position-relative">
+                        <img src="{{ photo }}"
+                             alt="Фото объекта"
+                             class="img-fluid rounded-3 shadow-lg object-fit-cover cosmic-image"
+                             style="max-height: 400px;">
+                        <div class="position-absolute top-0 end-0 mt-3 me-3">
+                            <span class="badge bg-primary fs-6 rounded-pill px-3 py-2">
+                                <i class="bi-{% if space_object.space_type == 'Planet' %}globe{% else %}star{% endif %} me-2"></i>
+                                {{ space_object.space_type }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="{% if photo %}col-lg-7{% else %}col-12{% endif %}">
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <h1 class="display-5 fw-bold text-dark mb-0">
+                            {{ space_object.name }}
+                            <small class="text-muted fs-4">{{ space_object.system.name }}</small>
+                        </h1>
+                        {% if user.is_superuser or space_object.creator == user %}
+                        <div class="btn-group">
+                            <a href="{% url 'edit_space_object' space_object.id %}"
+                               class="btn btn-sm btn-outline-primary rounded-pill px-3 me-2"
+                               data-bs-toggle="tooltip"
+                               title="Редактировать">
+                                <i class="bi-pencil-square"></i>
+                            </a>
+                            <a href="{% url 'delete_space_object' space_object.id %}"
+                               class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                               data-bs-toggle="tooltip"
+                               title="Удалить">
+                                <i class="bi-trash3"></i>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Характеристики -->
+                    <div class="row g-3 cosmic-stats">
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 bg-light-subtle shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <i class="bi-rulers fs-3 text-primary"></i>
+                                        <h5 class="mb-0">Орбитальные параметры</h5>
+                                    </div>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="d-flex justify-content-between py-2">
+                                            <span>Расстояние до звезды</span>
+                                            <strong>{{ space_object.radius|default:"–" }} а.е.</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between py-2">
+                                            <span>Период обращения</span>
+                                            <strong>{{ space_object.period|default:"–" }} лет</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between py-2">
+                                            <span>Эксцентриситет</span>
+                                            <strong>{{ space_object.ex|default:"–" }}</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card h-100 border-0 bg-light-subtle shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <i class="bi-speedometer2 fs-3 text-danger"></i>
+                                        <h5 class="mb-0">Физические характеристики</h5>
+                                    </div>
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="d-flex justify-content-between py-2">
+                                            <span>Орбитальная скорость</span>
+                                            <strong>{{ space_object.v|default:"–" }} км/с</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between py-2">
+                                            <span>Плотность</span>
+                                            <strong>{{ space_object.p|default:"–" }} ×10³ кг/м³</strong>
+                                        </li>
+                                        <li class="d-flex justify-content-between py-2">
+                                            <span>Ускорение</span>
+                                            <strong>{{ space_object.g|default:"–" }} м/с²</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card border-0 bg-light-subtle shadow-sm">
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <i class="bi-globe fs-3 text-success"></i>
+                                                <div>
+                                                    <div class="text-muted small">Масса</div>
+                                                    <div class="h4 mb-0">{{ space_object.m|default:"–" }} M⊕</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <i class="bi-moon fs-3 text-warning"></i>
+                                                <div>
+                                                    <div class="text-muted small">Спутники</div>
+                                                    <div class="h4 mb-0">{{ space_object.sputnik|default:"–" }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Дополнительные секции -->
+            <div class="row g-4 mt-4">
+                <div class="col-lg-6">
+                    <div class="card border-0 bg-light-subtle shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <i class="bi-cloud-sun fs-3 text-info"></i>
+                                <h4 class="mb-0">Атмосфера</h4>
+                            </div>
+                            <div class="text-muted lh-lg">
+                                {{ space_object.atmosphere|default:"Нет данных об атмосфере" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card border-0 bg-light-subtle shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <i class="bi-journal-text fs-3 text-purple"></i>
+                                <h4 class="mb-0">Описание</h4>
+                            </div>
+                            <div class="text-muted lh-lg">
+                                {{ space_object.about|default:"Описание отсутствует" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    .cosmic-image {
+        transition: transform 0.3s ease;
+        border: 3px solid var(--bs-primary);
+    }
+
+    .cosmic-image:hover {
+        transform: scale(1.02);
+    }
+
+    .cosmic-stats .card {
+        transition: box-shadow 0.2s ease;
+    }
+
+    .cosmic-stats .card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .text-purple {
+        color: #6f42c1;
+    }
+</style>
+{% endblock %}

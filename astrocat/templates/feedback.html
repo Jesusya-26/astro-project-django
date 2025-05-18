@@ -1,0 +1,144 @@
+<!-- Шаблон для страницы с формой обратной связи -->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-body p-5">
+                    <!-- Заголовок с иконкой -->
+                    <div class="text-center mb-5">
+                        <div class="icon-wrapper bg-primary-gradient rounded-circle mb-3">
+                            <i class="bi-chat-dots text-white fs-3"></i>
+                        </div>
+                        <h2 class="fw-bold mb-2">Обратная связь</h2>
+                        <p class="text-muted">Мы ценим ваше мнение и обязательно ответим</p>
+                    </div>
+
+                    <!-- Форма -->
+                    <form method="post" novalidate class="needs-validation">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
+                        <!-- Поле имени -->
+                        <div class="form-floating mb-4">
+                            {{ form.name }}
+                            <label for="{{ form.name.id_for_label }}">
+                                <i class="bi-person me-2"></i>Ваше имя
+                            </label>
+                            {% for error in form.name.errors %}
+                            <div class="invalid-feedback d-flex align-items-center">
+                                <i class="bi-exclamation-circle me-2"></i>{{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Поле email -->
+                        <div class="form-floating mb-4">
+                            {{ form.email }}
+                            <label for="{{ form.email.id_for_label }}">
+                                <i class="bi-envelope me-2"></i>Электронная почта
+                            </label>
+                            {% for error in form.email.errors %}
+                            <div class="invalid-feedback d-flex align-items-center">
+                                <i class="bi-exclamation-circle me-2"></i>{{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Поле сообщения -->
+                        <div class="form-floating mb-4">
+                            {{ form.message }}
+                            <label for="{{ form.message.id_for_label }}">
+                                <i class="bi-pencil-square me-2"></i>Ваше сообщение
+                            </label>
+                            {% for error in form.message.errors %}
+                            <div class="invalid-feedback d-flex align-items-center">
+                                <i class="bi-exclamation-circle me-2"></i>{{ error }}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Кнопка отправки -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3">
+                                <i class="bi-send-check me-2"></i>Отправить сообщение
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Сообщение об успехе -->
+                    {% if success %}
+                    <div class="alert alert-success mt-4 d-flex align-items-center fade-show">
+                        <i class="bi-check2-circle fs-4 me-3"></i>
+                        <div>Спасибо! Ваше сообщение успешно отправлено</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .icon-wrapper {
+        width: 70px;
+        height: 70px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bg-primary-gradient {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    .form-floating textarea.form-control {
+        height: 150px !important;
+        resize: none;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .invalid-feedback {
+        font-size: 0.875em;
+    }
+
+    .fade-show {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-body {
+            padding: 2rem;
+        }
+
+        .btn-lg {
+            padding: 1rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
